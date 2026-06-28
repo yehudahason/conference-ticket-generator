@@ -1,1 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inconsolata:wght@200..900&family=Outfit:wght@100..900&display=swap");
+
 @import "tailwindcss";
+
+@theme {
+  --font-mono: "Inconsolata", monospace;
+}
+@utility text-preset-1 {
+  @apply text-[1.875rem] font-bold leading-[110%];
+
+  @variant md {
+    @apply font-mono text-[3.75rem] font-extrabold leading-[110%] tracking-[-1px] text-[#0D0A35];
+  }
+}
+@utility text-preset-4 {
+  font-family: var(--font-mono);
+  font-size: 1.5rem; /* 24px */
+  font-weight: 500;
+  line-height: 120%;
+  letter-spacing: -0.03125rem; /* -0.5px */
+}
+@utility text-preset-5-extrabold {
+  font-family: var(--font-mono);
+  font-size: 1.25rem; /* 20px */
+  font-weight: 800;
+  line-height: 110%;
+  letter-spacing: -0.01875rem; /* -0.3px */
+}
+@utility text-preset-5 {
+  font-family: var(--font-mono);
+  font-size: 1.25rem; /* 20px */
+  font-weight: 500;
+  line-height: 110%;
+  letter-spacing: -0.03125rem; /* -0.5px */
+}
+
+@utility text-preset-6 {
+  font-family: var(--font-mono);
+  font-size: var(--text-preset-6-mobile);
+  line-height: var(--text-preset-6-mobile--line-height);
+  font-weight: var(--text-preset-6-mobile--font-weight);
+
+  @variant md {
+    font-size: var(--text-preset-6);
+    line-height: var(--text-preset-6--line-height);
+    font-weight: var(--text-preset-6--font-weight);
+  }
+}
+
+@utility text-preset-7 {
+  font-family: var(--font-mono);
+  font-size: var(--text-preset-7);
+  line-height: var(--text-preset-7--line-height);
+  letter-spacing: var(--text-preset-7--letter-spacing);
+  font-weight: var(--text-preset-7--font-weight);
+}
+@theme {
+  /* Neutral */
+  --color-neutral-900: #0d082d;
+  --color-neutral-800: #2c284b;
+  --color-neutral-700: #4b4869;
+  --color-neutral-500: #8784a5;
+  --color-neutral-300: #d1d0d5;
+  --color-neutral-0: #ffffff;
+
+  /* Orange */
+  --color-orange-700: #e1604f;
+  --color-orange-500: #f57463;
+
+  /* Gradient */
+  --gradient-01: linear-gradient(90deg, #f37362 0%, #ffffff 100%);
+}
+body {
+  min-height: 100vh;
+  background-image: url("/images/background-mobile.png");
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 768px) {
+  body {
+    background-image: url("/images/background-tablet.png");
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    background-image: url("/images/background-desktop.png");
+  }
+}
