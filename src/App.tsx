@@ -1,12 +1,13 @@
 // import React from "react";
 
 import Header from "./components/Header";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
   const [avatar, setAvatar] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const dragCounter = useRef(0);
 
   const handleFile = (getfile: File) => {
     if (!["image/jpeg", "image/png"].includes(getfile.type)) {
@@ -27,25 +28,31 @@ export default function App() {
     e.preventDefault();
   };
 
-  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
+    dragCounter.current++;
     setIsDragging(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    dragCounter.current--;
+
+    if (dragCounter.current === 0) {
+      setIsDragging(false);
+    }
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
+
+    dragCounter.current = 0;
     setIsDragging(false);
 
     const droppedFile = e.dataTransfer.files[0];
-
-    if (droppedFile) {
-      handleFile(droppedFile);
-    }
+    if (droppedFile) handleFile(droppedFile);
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
 
