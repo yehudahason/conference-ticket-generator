@@ -165,9 +165,26 @@ export default function App() {
     };
   }, [avatar]);
   return (
-    <>
+    <div>
+      <img
+        className="fixed right-0 top-3 "
+        src={`${baseUrl}/images/pattern-squiggly-line-top.svg`}
+        alt=""
+      />
+      <img
+        className="fixed -left-4 -bottom-16 lg:hidden"
+        src={`${baseUrl}/images/pattern-squiggly-line-bottom-mobile-tablet.svg`}
+        alt=""
+      />
+
+      {/* Desktop */}
+      <img
+        className="fixed bottom-0 left-0 hidden lg:block"
+        src={`${baseUrl}/images/pattern-squiggly-line-bottom-desktop.svg`}
+        alt=""
+      />
       <Header form={form} stage2={stage2} />
-      <main className="flex justify-center items-center flex-col mb-6 px-3">
+      <main className="flex justify-center items-center flex-col mb-6 px-3 relative">
         {stage2 && avatar ? (
           <div className="flex mt-6 relative sm:w-auto w-full">
             <img
@@ -423,6 +440,6 @@ export default function App() {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
