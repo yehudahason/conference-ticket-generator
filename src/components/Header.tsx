@@ -2,7 +2,7 @@ import type { FormInput } from "../App";
 
 type HeaderProps = {
   form: FormInput;
-  stage2: boolean;
+  stage2: boolean | null;
 };
 export default function Header({ form, stage2 }: HeaderProps) {
   const baseUrl = import.meta.env.BASE_URL;
