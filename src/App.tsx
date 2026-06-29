@@ -1,6 +1,7 @@
 // import React from "react";
 
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import {
   useEffect,
   useState,
@@ -169,7 +170,10 @@ export default function App() {
       <main className="flex justify-center items-center flex-col mb-6 px-3">
         {stage2 && avatar ? (
           <div className="flex mt-6 relative sm:w-auto w-full">
-            <img src={`${baseUrl}/images/pattern-ticket.svg`} alt="" />
+            <img
+              src={`${baseUrl}/images/pattern-ticket.svg`}
+              alt="invite ticket"
+            />
             <span
               className="absolute top-5/11 -right-1 text-preset-3
               text-gray-400
@@ -185,10 +189,13 @@ export default function App() {
                 alt="Avatar"
                 className=" z-10 ssm:h-22 ssm:w-22 h-12 w-12 rounded-xl object-cover"
               />
-              <div className="flex flex-col justify-center ">
+              <div className="flex flex-col justify-center  gap-2">
                 <p className="text-preset-3 text-white">{form.name}</p>
                 <p className="flex gap-2 items-center text-preset-5 text-gray-400">
-                  <img src={`${baseUrl}/images/icon-github.svg`} alt="" /> @
+                  <img
+                    src={`${baseUrl}/images/icon-github.svg`}
+                    alt="Github icon"
+                  />
                   {form.github}
                 </p>
               </div>
@@ -197,10 +204,10 @@ export default function App() {
               <img
                 className=""
                 src={`${baseUrl}/images/logo-full.svg`}
-                alt=""
+                alt="logo"
               />
               <span className="text-preset-6 text-gray-400">
-                {formatted}&nbsp; / &nbsp;Austin , TX
+                {formatted}&nbsp; / &nbsp;Austin, TX
               </span>
             </div>
           </div>
@@ -252,7 +259,7 @@ export default function App() {
                       <img
                         src={avatar}
                         alt="Avatar"
-                        className="h-18 w-18 rounded-xl object-cover"
+                        className="border-2 border-gray-400 h-18 w-18 rounded-xl object-cover"
                       />
 
                       <div className="flex gap-4">
@@ -296,7 +303,7 @@ export default function App() {
                     <>
                       <img
                         src={`${baseUrl}/images/icon-upload.svg`}
-                        alt=""
+                        alt="upload file"
                         className="rounded border-2 border-gray-600 p-1"
                       />
 
@@ -312,7 +319,7 @@ export default function App() {
               >
                 <img
                   src={`${baseUrl}/images/icon-info.svg`}
-                  alt=""
+                  alt="info"
                   className={`info ${error.maxFile ? "not-valid" : ""}`}
                 />
                 {error.maxFile
@@ -341,7 +348,7 @@ export default function App() {
               >
                 <img
                   src={`${baseUrl}/images/icon-info.svg`}
-                  alt=""
+                  alt="info"
                   className="info not-valid"
                 />
                 Please fill name
@@ -355,8 +362,8 @@ export default function App() {
               </label>
 
               <input
-                type="text"
-                id="text"
+                type="email"
+                id="email"
                 name="email"
                 className={`hover:bg-gray-700  mt-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.email ? "border border-red-400 focus:outline-none" : ""}
                 `}
@@ -371,7 +378,7 @@ export default function App() {
             >
               <img
                 src={`${baseUrl}/images/icon-info.svg`}
-                alt=""
+                alt="info"
                 className="info not-valid"
               />
               Please enter valid email
@@ -399,7 +406,7 @@ export default function App() {
               >
                 <img
                   src={`${baseUrl}/images/icon-info.svg`}
-                  alt=""
+                  alt="info"
                   className="info not-valid"
                 />
                 Please enter user
@@ -415,6 +422,7 @@ export default function App() {
           </form>
         )}
       </main>
+      <Footer />
     </>
   );
 }
