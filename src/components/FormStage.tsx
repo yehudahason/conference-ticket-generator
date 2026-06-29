@@ -308,7 +308,7 @@ export default function FormStage({
           autoComplete="name"
           onChange={(e) => handleName(e)}
           required
-          className={`hover:bg-gray-700  my-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.name ? "focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
+          className={`hover:bg-gray-700  my-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.name ? " border-red-400  focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
                 `}
         />
         {error.name ? (
@@ -342,7 +342,7 @@ export default function FormStage({
           type="email"
           id="email"
           name="email"
-          className={`hover:bg-gray-700  mt-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.email ? " focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
+          className={`hover:bg-gray-700  mt-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.email ? " border-red-400  focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
                 `}
           onChange={handleEmail}
           placeholder="example@email.com"
@@ -380,8 +380,8 @@ export default function FormStage({
           autoComplete="username"
           onChange={(e) => githubName(e)}
           required
-          className={`my-3 border-2  border-gray-700 rounded-xl text-preset-6 p-3 w-full
-                ${error.github ? "focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
+          className={`my-3 border-2 hover:bg-gray-700  border-gray-700 rounded-xl text-preset-6 p-3 w-full
+                ${error.github ? " border-red-400  focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
                 `}
         />
         {error.github && (
