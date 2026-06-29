@@ -1,13 +1,45 @@
 // import React from "react";
 
 import Header from "./components/Header";
-import { useEffect, useState, useRef } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
+import { validEmail } from "./utils/validEmail";
+
+type ErorrMesages = {
+  maxFile: boolean | undefined;
+  email: boolean | undefined;
+  name: boolean | undefined;
+  github: boolean | undefined;
+};
+
+export type FormInput = {
+  name: string | null;
+  email: string | null;
+  github: string | null;
+};
 
 export default function App() {
-  const [file, setFile] = useState<File | null>(null);
   const [avatar, setAvatar] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [error, setError] = useState<ErorrMesages>({
+    maxFile: undefined,
+    email: undefined,
+    name: undefined,
+    github: undefined,
+  });
+  const [form, setForm] = useState<FormInput>({
+    name: null,
+    email: null,
+    github: null,
+  });
   const dragCounter = useRef(0);
+  const [stage2, setStage2] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (getfile: File) => {
     if (!["image/jpeg", "image/png"].includes(getfile.type)) {
@@ -16,11 +48,16 @@ export default function App() {
     }
 
     if (getfile.size > 500 * 1024) {
-      alert("Max file size is 500KB.");
+      setError((prev) => ({ ...prev, maxFile: true }));
+      setAvatar(null);
       return;
     }
+    setError((prev) => ({ ...prev, maxFile: false }));
 
-    setFile(getfile);
+    if (avatar) {
+      URL.revokeObjectURL(avatar);
+    }
+
     const url = URL.createObjectURL(getfile);
     setAvatar(url);
   };
@@ -61,24 +98,67 @@ export default function App() {
     }
   };
 
+  function handleEmail(e: ChangeEvent<HTMLInputElement>) {
+    const valid = validEmail(e.target.value);
+    if (!valid) {
+      setError((prev) => ({ ...prev, email: true }));
+      return;
+    }
+    setError((prev) => ({ ...prev, email: false }));
+    setForm((prev) => ({
+      ...prev,
+      email: e.target.value,
+    }));
+  }
+  function handleName(e: ChangeEvent<HTMLInputElement>) {
+    const name = e.target.value;
+    if (!name.trim()) {
+      setError((prev) => ({ ...prev, name: true }));
+      return;
+    }
+    setError((prev) => ({ ...prev, name: false }));
+    setForm((prev) => ({
+      ...prev,
+      name,
+    }));
+  }
+  function githubName(e: ChangeEvent<HTMLInputElement>) {
+    const github = e.target.value;
+    if (!github.trim()) {
+      setError((prev) => ({ ...prev, github: true }));
+      return;
+    }
+    setError((prev) => ({ ...prev, github: false }));
+    setForm((prev) => ({
+      ...prev,
+      github,
+    }));
+  }
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (error.email === true || error.name === true || error.github === true) {
+      return;
+    }
+    setStage2(true);
+    console.log(form);
+  }
   useEffect(() => {
-    console.log(file, 0);
-  }, [file]);
+    return () => {
+      if (avatar) {
+        URL.revokeObjectURL(avatar);
+      }
+    };
+  }, [avatar]);
   const baseUrl = import.meta.env.BASE_URL;
   return (
     <>
-      <Header />
+      <Header form={form} stage2={stage2} />
       <main className="flex justify-center items-center flex-col mb-6 px-3">
-        {avatar ? (
-          <img
-            src={avatar}
-            alt="Avatar"
-            className="h-20 w-20 rounded-xl object-cover"
-          />
-        ) : (
-          <img src={`${baseUrl}/images/icon-upload.svg`} alt="" />
-        )}
-        <form className="ticket-form text-white flex flex-col gap-6">
+        <form
+          onSubmit={(e) => handleSubmit(e)}
+          className="ticket-form text-white flex flex-col gap-3"
+        >
           {/* Avatar Upload */}
           <div className="form-group">
             <label htmlFor="avatar" className="text-preset-5 text-white ">
@@ -86,21 +166,25 @@ export default function App() {
             </label>
 
             <div
-              className={`upload-area
+              className={`upload-area cursor-pointer
             flex flex-col justify-center items-center gap-4 my-3
-            bg-transparent hover:bg-neutral-800 sm:w-115   w-full border-2 border-dashed border-gray-500 rounded-xl
+            bg-transparent  sm:w-115   w-full border-2 border-dashed border-gray-500 rounded-xl 
+            min-h-36 
             
                 ${
                   isDragging
                     ? "border-orange-400 bg-neutral-700"
-                    : "border-gray-500 hover:bg-neutral-800"
-                }`}
+                    : "border-gray-500"
+                }
+                                
+                `}
               onDragOver={handleDragOver}
               onDragEnter={handleDragEnter}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
               <input
+                ref={inputRef}
                 id="avatar"
                 type="file"
                 accept=".jpg,.jpeg,.png"
@@ -110,22 +194,80 @@ export default function App() {
 
               <label
                 htmlFor="avatar"
-                className="flex h-full w-full cursor-pointer flex-col items-center justify-center gap-2 p-4"
+                className={`cursor-pointer flex h-full w-full flex-col items-center justify-center gap-5 p-4 
+                `}
               >
-                <img
-                  src={`${baseUrl}/images/icon-upload.svg`}
-                  alt=""
-                  className="rounded border-2 border-gray-600 p-1"
-                />
+                {avatar ? (
+                  <>
+                    <img
+                      src={avatar}
+                      alt="Avatar"
+                      className="h-18 w-18 rounded-xl object-cover"
+                    />
 
-                <span className="text-preset-6 text-gray-300">
-                  Drag and drop or click to upload
-                </span>
+                    <div className="flex gap-4">
+                      <button
+                        type="button"
+                        className="text-preset-6-mobile rounded px-2
+                      py-1
+                      text-neutral-400
+                      cursor-pointer
+                      bg-neutral-800"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (avatar) {
+                            URL.revokeObjectURL(avatar);
+                          }
+
+                          setAvatar(null);
+                          if (inputRef.current) {
+                            inputRef.current.value = "";
+                          }
+                        }}
+                      >
+                        Remove Image
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          inputRef.current?.click();
+                        }}
+                        className="text-preset-6-mobile  text-neutral-400 rounded px-2 py-1 cursor-pointer bg-neutral-800"
+                      >
+                        Change Image
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={`${baseUrl}/images/icon-upload.svg`}
+                      alt=""
+                      className="rounded border-2 border-gray-600 p-1"
+                    />
+
+                    <span className="text-preset-6 text-gray-300">
+                      Drag and drop or click to upload
+                    </span>
+                  </>
+                )}
               </label>
             </div>
-            <small className="upload-info text-preset-7 text-gray-400 flex gap-3 ">
-              <img src={`${baseUrl}/images/icon-info.svg`} alt="" />
-              Upload your photo (JPG or PNG, max size: 500KB).
+            <small
+              className={`upload-info text-preset-7 ${error.maxFile ? "text-red-400" : " text-gray-400"} flex gap-2 `}
+            >
+              <img
+                src={`${baseUrl}/images/icon-info.svg`}
+                alt=""
+                className={`info ${error.maxFile ? "not-valid" : ""}`}
+              />
+              {error.maxFile
+                ? "File too large .Please upload photo under 500KB."
+                : "Upload your photo (JPG or PNG, max size: 500KB)."}
             </small>
           </div>
           {/* Full Name */}
@@ -139,9 +281,21 @@ export default function App() {
               id="name"
               name="name"
               autoComplete="name"
+              onChange={(e) => handleName(e)}
               required
-              className="mt-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full"
+              className={`hover:bg-gray-700  my-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.name ? "border border-red-400 focus:outline-none" : ""}
+                `}
             />
+            <small
+              className={`text-preset-7 flex gap-2 text-red-400 items-center ${error.name === true ? "visible" : "hidden"}`}
+            >
+              <img
+                src={`${baseUrl}/images/icon-info.svg`}
+                alt=""
+                className="info not-valid"
+              />
+              Please fill name
+            </small>
           </div>
 
           {/* Email */}
@@ -154,12 +308,24 @@ export default function App() {
               type="text"
               id="text"
               name="email"
+              className={`hover:bg-gray-700  mt-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.email ? "border border-red-400 focus:outline-none" : ""}
+                `}
+              onChange={handleEmail}
               placeholder="example@email.com"
               required
-              className="mt-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full"
             />
           </div>
 
+          <small
+            className={`text-preset-7 flex gap-2 text-red-400 items-center ${error.email ? "" : "hidden"}`}
+          >
+            <img
+              src={`${baseUrl}/images/icon-info.svg`}
+              alt=""
+              className="info not-valid"
+            />
+            Please enter valid email
+          </small>
           {/* GitHub Username */}
           <div className="form-group">
             <label htmlFor="github" className="text-preset-5 ">
@@ -172,9 +338,22 @@ export default function App() {
               name="github"
               placeholder="@yourusername"
               autoComplete="username"
+              onChange={(e) => githubName(e)}
               required
-              className="mt-3 border-2  border-gray-700 rounded-xl text-preset-6 p-3 w-full"
+              className={`my-3 border-2  border-gray-700 rounded-xl text-preset-6 p-3 w-full
+                ${error.github ? "border border-red-400 focus:outline-none" : ""}
+                `}
             />
+            <small
+              className={`text-preset-7 flex gap-2 items-center text-red-400  ${error.github ? "" : "hidden"}`}
+            >
+              <img
+                src={`${baseUrl}/images/icon-info.svg`}
+                alt=""
+                className="info not-valid"
+              />
+              Please enter user
+            </small>
           </div>
 
           <button

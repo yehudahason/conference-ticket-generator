@@ -34,6 +34,13 @@
   letter-spacing: -0.03125rem; /* -0.5px */
 }
 
+@theme {
+  --text-preset-6-mobile: 0.875rem;
+  --text-preset-6-mobile--line-height: 1.2;
+  --text-preset-6-letter-spacing: 0;
+  --text-preset-6-mobile--font-weight: 500;
+}
+
 @utility text-preset-6 {
   font-family: var(--font-mono);
   font-size: var(--text-preset-6-mobile);
@@ -41,9 +48,9 @@
   font-weight: var(--text-preset-6-mobile--font-weight);
 
   @variant md {
-    font-size: var(--text-preset-6);
-    line-height: var(--text-preset-6--line-height);
-    font-weight: var(--text-preset-6--font-weight);
+    font-size: 1.125rem;
+    line-height: 1.2;
+    font-weight: 500;
   }
 }
 
@@ -69,6 +76,18 @@
 
   /* Gradient */
   --gradient-01: linear-gradient(90deg, #f37362 0%, #ffffff 100%);
+  --color-01: linear-gradient(90deg, #f37362 0%, #ffffff 100%);
+}
+
+:root {
+  --gradient-01: linear-gradient(90deg, #f37362 0%, #ffffff 100%);
+}
+
+.gradient-text {
+  background: var(--gradient-01);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 body {
   min-height: 100vh;
@@ -77,6 +96,10 @@ body {
   background-position: center;
 }
 
+.info.not-valid {
+  filter: invert(19%) sepia(100%) saturate(5000%) hue-rotate(356deg)
+    brightness(97%) contrast(122%);
+}
 @media (min-width: 768px) {
   body {
     background-image: url("/images/background-tablet.png");
