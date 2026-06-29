@@ -19,7 +19,9 @@ export default function Header({ form, stage2 }: HeaderProps) {
           " Your Journey to Coding Conf 2025 Starts Here!"
         )}
       </h1>
-      <p className="text-preset-4 text-neutral-300 max-w-[500px] text-center">
+      <p
+        className={`text-preset-4 text-neutral-300 ${stage2 ? " max-w-125" : ""} text-center`}
+      >
         {stage2 ? (
           <>
             We've emailed your ticket to{" "}

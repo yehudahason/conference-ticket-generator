@@ -171,7 +171,7 @@ export default function App() {
           <div className="flex mt-6 relative sm:w-auto w-full">
             <img src={`${baseUrl}/images/pattern-ticket.svg`} alt="" />
             <span
-              className="absolute top-2/5 -right-4 text-preset-3
+              className="absolute top-5/11 -right-1 text-preset-3
               text-gray-400
               rotate-90
               "
