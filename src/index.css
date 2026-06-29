@@ -12,6 +12,14 @@
     @apply font-mono text-[3.75rem] font-extrabold leading-[110%] tracking-[-1px] text-[#0D0A35];
   }
 }
+@utility text-preset-3 {
+  @apply font-mono text-[1.375rem] font-bold leading-[110%] tracking-[-0.0625rem];
+
+  @variant md {
+    @apply text-[1.875rem];
+  }
+}
+
 @utility text-preset-4 {
   font-family: var(--font-mono);
   font-size: 1.5rem; /* 24px */
@@ -39,6 +47,7 @@
   --text-preset-6-mobile--line-height: 1.2;
   --text-preset-6-letter-spacing: 0;
   --text-preset-6-mobile--font-weight: 500;
+  --breakpoint-ssm: 400px;
 }
 
 @utility text-preset-6 {
