@@ -148,6 +148,8 @@ export default function FormStage({
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // Initial all error show
     Object.entries(error).forEach(([key, value]) => {
       if (key !== "maxFile")
         if (value === undefined) {
@@ -157,10 +159,15 @@ export default function FormStage({
           }));
         }
     });
+
+    //Cancel submit if error
     if (error.email === true || error.name === true || error.github === true) {
       return;
     }
+
+    //Return if not upload pic
     if (!avatar) return;
+
     setTicket(ticketNumber());
     setStage2(true);
     console.log(form);
