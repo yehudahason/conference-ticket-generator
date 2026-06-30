@@ -148,6 +148,15 @@ export default function FormStage({
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    Object.entries(error).forEach(([key, value]) => {
+      if (key !== "maxFile")
+        if (value === undefined) {
+          setError((prev) => ({
+            ...prev,
+            [key]: true,
+          }));
+        }
+    });
     if (error.email === true || error.name === true || error.github === true) {
       return;
     }
@@ -307,7 +316,6 @@ export default function FormStage({
           name="name"
           autoComplete="name"
           onChange={(e) => handleName(e)}
-          required
           className={`hover:bg-gray-700  my-3 border-2 border-gray-700 rounded-xl text-preset-6 p-3 w-full ${error.name ? " border-red-400  focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
                 `}
         />
@@ -346,7 +354,6 @@ export default function FormStage({
                 `}
           onChange={handleEmail}
           placeholder="example@email.com"
-          required
         />
       </div>
       {error.email && (
@@ -379,7 +386,6 @@ export default function FormStage({
           placeholder="@yourusername"
           autoComplete="username"
           onChange={(e) => githubName(e)}
-          required
           className={`my-3 border-2 hover:bg-gray-700  border-gray-700 rounded-xl text-preset-6 p-3 w-full
                 ${error.github ? " border-red-400  focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2" : ""}
                 `}
