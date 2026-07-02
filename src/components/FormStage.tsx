@@ -164,7 +164,13 @@ export default function FormStage({
     if (error.email === true || error.name === true || error.github === true) {
       return;
     }
-
+    if (
+      error.email === undefined ||
+      error.name === undefined ||
+      error.github === undefined
+    ) {
+      return;
+    }
     //Return if not upload pic
     if (!avatar) return;
 
