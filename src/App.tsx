@@ -49,7 +49,6 @@ export default function App() {
           <FormStage
             stage2={stage2}
             setStage2={setStage2}
-            form={form}
             setTicket={setTicket}
             setForm={setForm}
             avatar={avatar}

@@ -10,24 +10,18 @@ import {
 } from "react";
 import { validEmail } from "../utils/validEmail";
 import { ticketNumber } from "../utils/ticketNumber";
-
-type ErorrMesages = {
+import type { FormInput } from "../App";
+type ErorrMessages = {
   maxFile: boolean | undefined;
+  wrongFile: boolean | undefined;
   email: boolean | undefined;
   name: boolean | undefined;
   github: boolean | undefined;
 };
 
-export type FormInput = {
-  name: string | null;
-  email: string | null;
-  github: string | null;
-};
-
 type FormProps = {
   ticket: string | null;
   avatar: string | null;
-  form: FormInput;
   stage2: boolean | null;
   setAvatar: Dispatch<SetStateAction<string | null>>;
   setForm: Dispatch<SetStateAction<FormInput>>;
@@ -36,15 +30,15 @@ type FormProps = {
 };
 export default function FormStage({
   avatar,
-  form,
   setAvatar,
   setForm,
   setTicket,
   setStage2,
 }: FormProps) {
   const [isDragging, setIsDragging] = useState(false);
-  const [error, setError] = useState<ErorrMesages>({
+  const [error, setError] = useState<ErorrMessages>({
     maxFile: undefined,
+    wrongFile: undefined,
     email: undefined,
     name: undefined,
     github: undefined,
@@ -55,6 +49,7 @@ export default function FormStage({
 
   const handleFile = (getfile: File) => {
     if (!["image/jpeg", "image/png"].includes(getfile.type)) {
+      setError((prev) => ({ ...prev, wrongFile: true }));
       return;
     }
 
@@ -64,6 +59,7 @@ export default function FormStage({
       return;
     }
     setError((prev) => ({ ...prev, maxFile: false }));
+    setError((prev) => ({ ...prev, wrongFile: false }));
 
     if (avatar) {
       URL.revokeObjectURL(avatar);
@@ -151,7 +147,7 @@ export default function FormStage({
 
     // Initial all error show
     Object.entries(error).forEach(([key, value]) => {
-      if (key !== "maxFile")
+      if (key !== "maxFile" && key !== "wrongFile")
         if (value === undefined) {
           setError((prev) => ({
             ...prev,
@@ -176,7 +172,6 @@ export default function FormStage({
 
     setTicket(ticketNumber());
     setStage2(true);
-    console.log(form);
   }
   useEffect(() => {
     return () => {
@@ -308,11 +303,16 @@ export default function FormStage({
             src={`${baseUrl}/images/icon-info.svg`}
             alt=""
             aria-hidden="true"
-            className={`info ${error.maxFile ? "not-valid" : ""}`}
+            className={`info ${error.maxFile || error.wrongFile ? "not-valid" : ""}`}
           />
-          {error.maxFile
-            ? "File too large .Please upload photo under 500KB."
-            : "Upload your photo (JPG or PNG, max size: 500KB)."}
+          {error.maxFile ? (
+            "File too large .Please upload photo under 500KB."
+          ) : (
+            <span className={`${error.wrongFile ? "text-red-400" : ""}`}>
+              {" "}
+              Upload your photo (JPG or PNG, max size: 500KB).
+            </span>
+          )}
         </small>
       </div>
       {/* Full Name */}
